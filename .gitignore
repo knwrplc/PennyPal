@@ -1,0 +1,43 @@
+# --- Python basics ---
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+.env
+.env.*            
+#env files (if any)
+
+# --- Packaging / build ---
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- Testing / tooling caches ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+.hypothesis/
+
+# --- Editors / OS ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+#keep this if you don’t share editor settings         
+!.vscode/extensions.json
+!.vscode/launch.json
+
+# --- Project data & logs ---
+data/*.json
+data/*.csv
+logs/
+!data/.gitkeep
+ #keep the folder; add an empty .gitkeep file
+!logs/.gitkeep
+
+# --- Misc ---
+.python-version   # pyenv

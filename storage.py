@@ -14,7 +14,9 @@ def load_ledger() -> List[Dict[str, Any]]:
     return rows
 
 def save_ledger(rows: List[Dict[str, Any]]) -> None:
-    pass
+    _ensure_file()
+    text = json.dumps(rows, ensure_ascii= False, indent=2)
+    DATA_PATH.write_text(text, encoding="utf-8")
 
 def _ensure_file() -> None:
     DATA_PATH.parent.mkdir(parents=True, exist_ok=True)

@@ -1,5 +1,5 @@
 import argparse
-from datetime import datetime
+from datetime import date
 from typing import Any, Dict, List
 from storage import load_ledger, save_ledger
         
@@ -23,11 +23,42 @@ def build_parser() -> argparse.ArgumentParser:
     
     return p
 
+def cmd_add(args) -> None:
+    d = args.date or date.today().isoformat()
+    kind = "income" if args.amount >= 0 else "expense"
+    row = {
+        "date" : d,
+        "amount" : float(args.amount),
+        "category" : args.category,
+        "note" : args.note,
+        "kind" : kind
+        }
+
+    ledger = load_ledger()
+    ledger.append(row)
+    save_ledger(ledger)
+    
+    print(f"Added: {d} | {args.amount:>8.2f} | {args.category} | {args.note}")
+
+def cmd_list(args) -> None:
+    ledger = load_ledger()
+    if not ledger:
+        print("No expenses yet.")
+        return
+    
+    print("DATE        AMOUNT   KIND      CATEGORY    NOTE")
+    print("-" * 60)
+    for r in ledger:
+        print(f"")
 
 def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
-    print(args)
+    
+    if args.cmd == "add":
+        cmd_add(args)
+    elif args.cmd == "list":
+        cmd_list(args)
     
 if __name__ == "__main__":
     main() 

@@ -49,7 +49,7 @@ def cmd_list(args) -> None:
     print("DATE        AMOUNT   KIND      CATEGORY    NOTE")
     print("-" * 60)
     for r in ledger:
-        print(f"")
+        print(f"{r['date']}  {r['amount']:>8.2f}  {r['kind']:<8}  {r['category']:<10}  {r['note']}")
 
 def main() -> None:
     parser = build_parser()

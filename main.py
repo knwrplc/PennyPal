@@ -2,16 +2,19 @@ import argparse
 from datetime import date
 from typing import Any, Dict, List
 from storage import load_ledger, save_ledger
+import sys
+
+def parse_date_or_today(raw: str | None ) -> str:
+    if raw is None or raw == "":
+        return date.today().isoformat()
+    try:
+        parsed = date.fromisoformat(raw)
+    except ValueError: 
+        raise InvalidInputError("Date must be in YYYY-MM-DD format")
+    return parsed.isoformat()
 
 class InvalidInputError(Exception):
-    def parse_date_or_today(raw: str | None ) -> str:
-        if raw is None or raw == "":
-            return date.today().isoformat()
-        try:
-            parsed = date.fromisoformat(raw)
-        except ValueError: 
-            raise InvalidInputError("Date must be in YYYY-MM-DD format")
-        return parsed.isoformat()
+    pass
         
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
@@ -34,7 +37,12 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 def cmd_add(args) -> None:
-    d = args.date or date.today().isoformat()
+    try:
+        d = parse_date_or_today(args.date)
+    except InvalidInputError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+    
     kind = "income" if args.amount >= 0 else "expense"
     row = {
         "date" : d,

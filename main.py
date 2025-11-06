@@ -2,6 +2,16 @@ import argparse
 from datetime import date
 from typing import Any, Dict, List
 from storage import load_ledger, save_ledger
+
+class InvalidInputError(Exception):
+    def parse_date_or_today(raw: str | None ) -> str:
+        if raw is None or raw == "":
+            return date.today().isoformat()
+        try:
+            parsed = date.fromisoformat(raw)
+        except ValueError: 
+            raise InvalidInputError("Date must be in YYYY-MM-DD format")
+        return parsed.isoformat()
         
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
@@ -43,7 +53,7 @@ def cmd_add(args) -> None:
 def cmd_list(args) -> None:
     ledger = load_ledger()
     if not ledger:
-        print("No expenses yet.")
+        print("No transactions yet.")
         return
     
     print("DATE        AMOUNT   KIND      CATEGORY    NOTE")
